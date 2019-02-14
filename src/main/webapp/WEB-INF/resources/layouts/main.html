@@ -3,6 +3,16 @@
 	<title>{% block title %}My Website{% endblock %}</title>
 </head>
 <body>
+	<nav>
+		<ul>
+			{% if isLoggedIn == false %}
+				<li><a href="/WebAppServlet/login">Login</a></li>
+			{% else %}
+				<li><a href="javascript:;">Welcome back, {{ username }}</a></li>
+				<li><a href="/WebAppServlet/logout">Logout</a></li>
+			{% endif %}
+		</ul>
+	</nav>
 	<div id="content">
 		{% block content %}{% endblock %}
 	</div>

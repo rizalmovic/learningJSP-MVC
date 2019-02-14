@@ -5,13 +5,17 @@ import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-@WebServlet("/")
-public class MainController extends Controller {
+@WebServlet("/logout")
+public class LogoutController extends Controller {
 
-    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        render("index", response);
+        HttpSession session = request.getSession();
+
+        session.removeAttribute("username");
+        session.removeAttribute("isLoggedIn");
+        response.sendRedirect("/WebAppServlet/login");
     }
 
 }
