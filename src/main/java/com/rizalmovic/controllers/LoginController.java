@@ -27,7 +27,6 @@ public class LoginController extends Controller {
         if(auth.login(username, password)) {
             session.setAttribute("username", username);
             session.setAttribute("isLoggedIn", true);
-            this.setSession(session);
             response.sendRedirect("/WebAppServlet");
         } else {
             response.sendError(403, "Invalid username & password");

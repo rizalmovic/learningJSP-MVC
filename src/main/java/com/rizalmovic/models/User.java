@@ -1,19 +1,53 @@
 package com.rizalmovic.models;
 
+import com.rizalmovic.libraries.DB.Query;
 import org.mindrot.jbcrypt.BCrypt;
 
-public class User {
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class User extends Query<User> {
+
+    public User() throws IOException, SQLException {
+        super();
+
+        this.table = "users";
+    }
 
     private int id;
     private String name;
     private String email;
     private String password;
 
+    @Override
+    public User mapping(ResultSet result) throws IllegalAccessException, InstantiationException {
+        User obj = getClass().newInstance();
+
+        try {
+            obj.setId(result.getInt("id"));
+            obj.setName(result.getString("name"));
+            obj.setEmail(result.getString("email"));
+            obj.setPassword(result.getString("password"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return obj;
+    }
+
     /**
      * @return the id
      */
     public int getId() {
         return id;
+    }
+
+    /**
+     * @param id the name to set
+     */
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**
@@ -66,4 +100,13 @@ public class User {
         return BCrypt.checkpw(password, this.password);
     }
 
+    /**
+     * @param name name of the table
+     */
+    public void setTable(String name) { this.table = name; }
+
+    /**
+     * @return the table name
+     */
+    public String getTable() { return this.table; }
 }

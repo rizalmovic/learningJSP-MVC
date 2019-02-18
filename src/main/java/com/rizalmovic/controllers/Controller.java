@@ -15,13 +15,10 @@ import java.util.Map;
 @WebServlet
 public class Controller extends HttpServlet {
 
-    private HttpSession session;
-
     protected void render(String view, HttpServletResponse response) throws IOException {
         TemplateEngine.getInstance(getServletContext());
         Map<String, Object> data = new HashMap<String, Object>();
 
-        data.put("session", this.session);
         String renderedView = TemplateEngine.render(view, data);
 
         response.setContentType("text/html");
@@ -32,7 +29,6 @@ public class Controller extends HttpServlet {
     protected void render(String view, Map<String, Object> data, HttpServletResponse response) throws IOException {
         TemplateEngine.getInstance(getServletContext());
 
-        data.put("session", this.session);
         String renderedView = TemplateEngine.render(view, data);
 
         response.setContentType("text/html");
@@ -40,7 +36,4 @@ public class Controller extends HttpServlet {
         out.println(renderedView);
     }
 
-    public void setSession(HttpSession session) {
-        this.session = session;
-    }
 }
