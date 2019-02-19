@@ -4,5 +4,13 @@
 
 {% block content %}
 	<h1> Home </h1>
-	<p> Welcome to my home page. My name is {{ name }}.</p>
+	<p> Welcome to my home page. My name is {{ session.getAttribute("username") }}.</p>
+
+{% for user in users %}
+	<dl>
+		<dt>{{ user.name }}</dt>
+		<dd>{{ user.email }}</dd>
+	</dl>
+{% endfor %}
+
 {% endblock %}

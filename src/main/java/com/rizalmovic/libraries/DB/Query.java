@@ -32,6 +32,10 @@ public class Query<T> {
         return obj;
     }
 
+    public String toQuery(T user) {
+
+    }
+
     public List<T> findAll() throws SQLException, InstantiationException, IllegalAccessException {
         List<T> datas = new ArrayList<T>();
         this.select(new ArrayList<String>(Arrays.asList("*")));
@@ -45,25 +49,21 @@ public class Query<T> {
     }
 
 
-    public T findById(String id) throws SQLException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        this.query = "WHERE id = " + id;
+    public T findById(String id) throws SQLException, IllegalAccessException, InstantiationException {
+        this.query = "WHERE id = " + id + " LIMIT 1";
         ResultSet result = this.db.execute(this.selection + " " + this.query);
         ResultSetMetaData meta = result.getMetaData();
         Field[] fields = this.dataObject.getClass().getDeclaredFields();
 
         while (result.next()) {
-            for(int i = 0; i < meta.getColumnCount(); i++) {
-                String columnName = meta.getColumnName(i + 1);
-                Object columnValue = result.getObject(i + 1);
-
-                for(Field field : fields) {
-                    Method method = this.dataObject.getClass().getMethod("set" + columnName.substring(0,1).toUpperCase() + columnName.substring(1));
-                    method.invoke(columnValue);
-                }
-            }
+            this.dataObject = this.mapping(result);
         }
 
         return this.dataObject;
+    }
+
+    public T save() {
+
     }
 
 //    public T create(T data) {}
