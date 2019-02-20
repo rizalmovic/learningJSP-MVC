@@ -1,25 +1,21 @@
 <html>
 <head>
 	<title>{% block title %}My Website{% endblock %}</title>
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+	<style>
+		#content {
+			padding-top: 2em;
+		}
+	</style>
 </head>
 <body>
-	<nav>
-		<ul>
-			{% if isLoggedIn == false %}
-				<li><a href="/WebAppServlet/login">Login</a></li>
-			{% else %}
-				<li><a href="javascript:;">Welcome back, {{ username }}</a></li>
-				<li><a href="/WebAppServlet/logout">Logout</a></li>
-			{% endif %}
-		</ul>
-	</nav>
-	<div id="content">
+	{% include "./partials/_nav" %}
+	<div class="container" id="content">
 		{% block content %}{% endblock %}
 	</div>
-	<div id="footer">
-		{% block footer %}
-			Copyright 2018
-		{% endblock %}
-	</div>
+
+	<script src="//code.jquery.com/jquery-3.3.1.min.js"
+			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

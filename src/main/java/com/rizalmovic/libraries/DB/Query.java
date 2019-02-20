@@ -1,17 +1,15 @@
 package com.rizalmovic.libraries.DB;
 
+import com.rizalmovic.models.User;
+
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Query<T> {
+public class Query<T> implements QueryInterface {
 
     private DB db;
     public String table;
@@ -23,6 +21,15 @@ public class Query<T> {
         this.db = new DB();
     }
 
+    public void setQuery(String query) {
+        this.query = query;
+    }
+    public void appendQuery(String query) { this.query += " " + query; }
+    public void prependQuery(String query) { this.query = query + " " + this.query; }
+    public String getQuery() { return this.query; }
+    public String getSelection() { return this.selection; }
+    public DB getDB() { return this.db; }
+
     public void select(ArrayList<String> columns) {
         this.selection = "SELECT " + columns.stream().reduce("", String::concat) + " FROM " + this.table + " ";
     }
@@ -32,40 +39,69 @@ public class Query<T> {
         return obj;
     }
 
-    public String toQuery(T user) {
+     public String toQuery(String type, T obj) {
+        return "";
+     }
 
-    }
-
-    public List<T> findAll() throws SQLException, InstantiationException, IllegalAccessException {
+    public List<T> findAll() {
         List<T> datas = new ArrayList<T>();
         this.select(new ArrayList<String>(Arrays.asList("*")));
-        ResultSet result = this.db.execute(this.selection);
-
-        while (result.next()) {
-            datas.add(this.mapping(result));
+        ResultSet result = null;
+        try {
+            result = this.db.executeQuery(this.selection);
+            while (result.next()) {
+                datas.add(this.mapping(result));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
         }
 
         return datas;
     }
 
 
-    public T findById(String id) throws SQLException, IllegalAccessException, InstantiationException {
+    public T findById(String id) {
         this.query = "WHERE id = " + id + " LIMIT 1";
-        ResultSet result = this.db.execute(this.selection + " " + this.query);
-        ResultSetMetaData meta = result.getMetaData();
-        Field[] fields = this.dataObject.getClass().getDeclaredFields();
-
-        while (result.next()) {
-            this.dataObject = this.mapping(result);
+        ResultSet result = null;
+        try {
+            result = this.db.executeQuery(this.selection + " " + this.query);
+            while (result.next()) {
+                this.dataObject = this.mapping(result);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
         }
 
         return this.dataObject;
     }
 
-    public T save() {
-
+    public boolean save(Object obj) {
+        this.query = this.toQuery("INSERT", (T) obj);
+        try {
+            return this.db.executeUpdate(this.query) > 0 ? true : false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-//    public T create(T data) {}
-//    public T update(T data) {}
+    public boolean update(Object obj) {
+        this.query = this.toQuery("UPDATE", (T) obj);
+
+        try {
+            return this.db.executeUpdate(this.query) > 0 ? true : false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

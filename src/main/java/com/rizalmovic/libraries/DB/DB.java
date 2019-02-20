@@ -48,9 +48,18 @@ public class DB implements DBInterface {
         this.connection = DriverManager.getConnection("jdbc:mysql://" + this.host + "/" + this.dbname, this.username, this.password);
     }
 
-    public ResultSet execute(String query) throws SQLException {
+    public ResultSet executeQuery(String query) throws SQLException {
         Statement statement = this.connection.createStatement();
-        return statement.executeQuery(query);
+        ResultSet result = statement.executeQuery(query);
+        this.connection.close(); // close connection
+        return result;
+    }
+
+    public int executeUpdate(String query) throws SQLException {
+        Statement statement = this.connection.createStatement();
+        int result = statement.executeUpdate(query);
+        this.connection.close(); // close connection
+        return result;
     }
 
 }

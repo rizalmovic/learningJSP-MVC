@@ -36,6 +36,20 @@ public class User extends Query<User> {
         return obj;
     }
 
+    @Override
+    public String toQuery(String type, User user) {
+        switch (type) {
+            case "INSERT":
+                break;
+            default:
+                break;
+        }
+
+        this.setQuery("INSERT");
+
+        return "";
+    }
+
     /**
      * @return the id
      */
@@ -109,4 +123,15 @@ public class User extends Query<User> {
      * @return the table name
      */
     public String getTable() { return this.table; }
+
+    public User findByEmail(String email) throws SQLException, InstantiationException, IllegalAccessException {
+        this.setQuery("WHERE email = " + email + " LIMIT 1");
+        ResultSet result = this.getDB().executeQuery(this.getSelection() + " " + this.getQuery());
+
+        while (result.next()) {
+            return this.mapping(result);
+        }
+
+        return this;
+    }
 }

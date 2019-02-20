@@ -3,14 +3,8 @@
 {% block title %} Home {% endblock %}
 
 {% block content %}
-	<h1> Home </h1>
-	<p> Welcome to my home page. My name is {{ session.getAttribute("username") }}.</p>
 
-{% for user in users %}
-	<dl>
-		<dt>{{ user.name }}</dt>
-		<dd>{{ user.email }}</dd>
-	</dl>
-{% endfor %}
+	<h1>RMS Studycase</h1>
+	<p>JSP Web application that implement MVC pattern.</p>
 
 {% endblock %}
