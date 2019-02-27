@@ -51,14 +51,14 @@ public class DB implements DBInterface {
     public ResultSet executeQuery(String query) throws SQLException {
         Statement statement = this.connection.createStatement();
         ResultSet result = statement.executeQuery(query);
-        this.connection.close(); // close connection
+        // this.connection.close(); // close connection
         return result;
     }
 
     public int executeUpdate(String query) throws SQLException {
         Statement statement = this.connection.createStatement();
         int result = statement.executeUpdate(query);
-        this.connection.close(); // close connection
+        // this.connection.close(); // close connection
         return result;
     }
 

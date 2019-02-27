@@ -15,6 +15,12 @@ public class AuthMySQL implements AuthInterface {
 
     @Override
     public boolean login(String username, String password) {
+        try {
+            User user = this.user.findByEmail(username.trim());
+            return user.verifyPassword(password.trim(), user.getPassword());
+        } catch (SQLException | IOException | IllegalAccessException | InstantiationException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 

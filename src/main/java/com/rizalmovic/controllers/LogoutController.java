@@ -11,11 +11,12 @@ import javax.servlet.http.HttpSession;
 public class LogoutController extends Controller {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession();
+        this.isAuthenticated(request, response);
 
+        HttpSession session = request.getSession();
         session.removeAttribute("username");
         session.removeAttribute("isLoggedIn");
-        response.sendRedirect("/WebAppServlet/login");
+        response.sendRedirect("/login");
     }
 
 }

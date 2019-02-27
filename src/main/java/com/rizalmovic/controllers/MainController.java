@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.rizalmovic.models.User;
 
-@WebServlet("/")
+@WebServlet("")
 public class MainController extends Controller {
 
     @Override
@@ -21,13 +21,8 @@ public class MainController extends Controller {
             this.session = request.getSession();
             this.data.put("users", users);
 
-            // TEST
             render("index", response);
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
     }
