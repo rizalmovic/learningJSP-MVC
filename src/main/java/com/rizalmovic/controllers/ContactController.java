@@ -1,6 +1,7 @@
 package com.rizalmovic.controllers;
 
 import com.rizalmovic.models.Contact;
+import com.rizalmovic.repositories.ContactRepository;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,8 @@ import java.util.List;
 
 @WebServlet("/contact")
 public class ContactController extends Controller {
+
+    private static ContactRepository repository = new ContactRepository();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -28,13 +31,8 @@ public class ContactController extends Controller {
             this.data.put("error", err);
             this.data.put("success", succ);
 
-            try {
-                Contact contact = new Contact();
-                List<Contact> contacts = contact.findAll();
-                this.data.put("contacts", contacts);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            List<Contact> contacts = repository.all();
+            this.data.put("contacts", contacts);
 
             render("contacts/index", response);
         }
@@ -43,14 +41,8 @@ public class ContactController extends Controller {
     protected void doEdit(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String id = request.getParameter("id");
 
-        try {
-            Contact contact = new Contact();
-            contact = contact.findById(id);
-
-            this.data.put("contact", contact);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Contact contact = repository.find( Integer.valueOf(id));
+        this.data.put("contact", contact);
 
         render("contacts/edit", response);
     }
@@ -80,13 +72,13 @@ public class ContactController extends Controller {
                 contact.setPhone(phone);
                 contact.setMobile(mobile);
 
-                if(!contact.validate() || !contact.save()) {
+                if(repository.save(contact) instanceof Contact) {
                     response.sendRedirect("/contact?error=\"Error on saving data\"");
                 } else {
                     response.sendRedirect("/contact?success=\"Data saved.\"");
                 }
 
-            } catch (SQLException | IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -102,8 +94,7 @@ public class ContactController extends Controller {
         String mobile = request.getParameter("mobile");
 
         try {
-            Contact contact = new Contact();
-            contact = contact.findById(id);
+            Contact contact = repository.find(Integer.valueOf(id));
 
             // Assign parameters to contact object
             contact.setName(name);
@@ -111,13 +102,13 @@ public class ContactController extends Controller {
             contact.setPhone(phone);
             contact.setMobile(mobile);
 
-            if(!contact.validate() || !contact.update()) {
+            if(repository.save(contact) instanceof Contact) {
                 response.sendRedirect("/contact?error=\"Error on saving data\"");
             } else {
                 response.sendRedirect("/contact?success=\"Data saved.\"");
             }
 
-        } catch (SQLException | IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -127,15 +118,12 @@ public class ContactController extends Controller {
         String id = request.getParameter("id");
 
         try {
-            Contact contact = new Contact();
-            contact = contact.findById(id);
-
-            if(!contact.delete()) {
+            if(repository.delete(Integer.valueOf(id))) {
                 response.sendRedirect("/contact?error=\"Error on deleting data\"");
             } else {
                 response.sendRedirect("/contact?success=\"Data deleted.\"");
             }
-        } catch (SQLException | IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

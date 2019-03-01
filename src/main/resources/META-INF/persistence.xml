@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<persistence version="2.0"
+             xmlns="http://java.sun.com/xml/ns/persistence">
+    <persistence-unit name="db" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://192.168.33.10:3306/jsp"></property>
+            <property name="javax.persistence.jdbc.user" value="rizalmovic" />
+            <property name="javax.persistence.jdbc.password" value="password" />
+            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.format_sql" value="true" />
+        </properties>
+    </persistence-unit>
+</persistence>

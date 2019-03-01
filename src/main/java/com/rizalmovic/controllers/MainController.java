@@ -14,17 +14,7 @@ public class MainController extends Controller {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        try {
-            User user = new User();
-            List<User> users = user.findAll();
-
-            this.session = request.getSession();
-            this.data.put("users", users);
-
-            render("index", response);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        render("index", response);
     }
 
 }

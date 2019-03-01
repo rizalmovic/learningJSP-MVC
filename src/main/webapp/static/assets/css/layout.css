@@ -1,3 +1,7 @@
-nav {
-    margin-bottom: 2em !important;
+#content {
+    margin-top: 2em !important;
+}
+
+.actions {
+    margin: 2em 0;
 }
